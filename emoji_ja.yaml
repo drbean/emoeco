@@ -1,0 +1,39 @@
+data:
+  - id: "1386953412235829250"
+    text: 'RT @mitsumitz: バッキーのemojiがにこにこになったよ\uD83D\uDE42'
+  - id: "1386953053383708676"
+    text: 'RT @mitsumitz: バッキーのemojiがにこにこになったよ\uD83D\uDE42'
+  - id: "1386951759189315585"
+    text: 'RT @mitsumitz: バッキーのemojiがにこにこになったよ\uD83D\uDE42'
+  - id: "1386951714477985796"
+    text: 'RT @mitsumitz: バッキーのemojiがにこにこになったよ\uD83D\uDE42'
+  - id: "1386951640255586306"
+    text: iOS 14.5で違う肌の色の人同士を組み合わせた合字に対応したっぽいけど、文字コード大変そう https://t.co/r85e2OVkRb
+  - id: "1386951610954309633"
+    text: |-
+      RT @naverformyg: \uD83D\uDCDD | ARTICULOS SUGA — 21.04.19
+
+      \uD83D\uDD17https://t.co/9JuZrYUta4
+      \uD83D\uDD17https://t.co/al7qgWY9aN
+      \uD83D\uDD17https://t.co/WxuGOm5ZHB
+
+      META NAVER: 2,5…
+  - id: "1386951551353163776"
+    text: emoji、思ったより手強い。。。色々試してみたけどutf-8でJSONからstringにしたままだと絵文字になってないみたい。絵文字が入ったテキストデータがあればそれをReactで表示するところまでは行けたっぽいから、明日はどうやってこれに対処するか考えるか。。。でも埒が開かなそうだからまずはdb移行を https://t.co/RfJpzPs3zG
+  - id: "1386951402442821637"
+    text: |-
+      RT @usagi_ssg: [pupu]
+      https://t.co/KEMmdKf6j5
+      少ないけどププちゃんでました
+  - id: "1386950677046251521"
+    text: 'RT @mitsumitz: バッキーのemojiがにこにこになったよ\uD83D\uDE42'
+  - id: "1386950532347035657"
+    text: |-
+      RT @usagi_ssg: [pupu]
+      https://t.co/KEMmdKf6j5
+      少ないけどププちゃんでました
+meta:
+  newest_id: "1386953412235829250"
+  oldest_id: "1386950532347035657"
+  result_count: 10
+  next_token: b26v89c19zqg8o3fosttbmdetpko9tupfy7vxg7sf0kn1
