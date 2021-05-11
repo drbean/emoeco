@@ -4,9 +4,16 @@ my $done = AE::cv;
 
 my $user = 'beancounterbean';
 my $password = '19491949';
+my $token = 'bHSrhpFZ9uzpXzqthQkqUjprI';
+my $token_secret = 'sLUR0M8FVLfeTbrKD9eeLh3zEITPfoNZCg9o8xupPK2fpnolvN';
  
 # receive updates from @following_ids
 my $listener = AnyEvent::Twitter::Stream->new(
+    # consumer_key    => $consumer_key,
+    # consumer_secret => $consumer_secret,
+    token           => $token,
+    token_secret    => $token_secret,
+    method          => "filter",
     username => $user,
     password => $password,
     method   => "filter",  # "firehose" for everything, "sample" for sample timeline
