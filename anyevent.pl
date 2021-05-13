@@ -1,6 +1,57 @@
 use AnyEvent;
 use AnyEvent::Handle;
+use AnyEvent::HTTP;
  
+my $loop = AnyEvent->condvar;
+
+#use AnyEvent;
+#use AnyEvent::Socket;
+# 
+#sub finger($$) {
+#   my ($user, $host) = @_;
+# 
+#   # use a condvar to return results
+#   my $cv = AnyEvent->condvar;
+# 
+#   # first, connect to the host
+#   tcp_connect $host, "http", sub {
+#      # the callback receives the socket handle - or nothing
+#      my ($fh) = @_
+#         or return $cv->send;
+# 
+#      # now write the username
+#      # syswrite $fh, "$user\015\012";
+# 
+#      my $response;
+# 
+#      # register a read watcher
+#      my $read_watcher; $read_watcher = AnyEvent->io (
+#         fh   => $fh,
+#         poll => "r",
+#         cb   => sub {
+#            my $len = sysread $fh, $response, 1024, length $response;
+# 
+#            if ($len <= 0) {
+#               # we are done, or an error occured, lets ignore the latter
+#               undef $read_watcher; # no longer interested
+#               $cv->send ($response); # send results
+#            }
+#         },
+#      );
+#   };
+# 
+#   # pass $cv to the caller
+#   $cv
+#}
+#
+#my $f1 = finger "icculus?listarchives=1", "drbean.sdf.org";
+#my $f2 = finger "kuriyama", "freebsd.org";
+#my $f3 = finger "mikachu", "icculus.org";
+# 
+#print "kuriyama's gpg key\n"    , $f1->recv, "\n";
+#print "icculus' plan archive\n" , $f2->recv, "\n";
+#print "mikachu's plan zomgn\n"  , $f3->recv, "\n";
+
 #$| = 1; print "enter your name> ";
 # 
 #my $name_ready = AnyEvent->condvar;
@@ -39,14 +90,14 @@ use AnyEvent::Handle;
 #
 #$quit_program->recv;
 
-sub http_get {
+sub http_get ($@) {
    my ($host, $uri, $cb) = @_;
  
    # store results here
    my ($response, $header, $body);
  
    my $handle; $handle = new AnyEvent::Handle
-      connect  => [$host => 'https'],
+      connect  => [$host => 'http'],
       on_error => sub {
          $cb->("HTTP/1.0 500 $!");
          # $handle->destroy; # explicitly destroy handle
@@ -77,7 +128,7 @@ sub http_get {
    });
 }
 
-http_get "drbean.sdf.org", "/", sub {
+http_get "http://news.google.com", "/?hl=zh", sub {
    my ($response, $header, $body) = @_;
  
    print
@@ -85,3 +136,12 @@ http_get "drbean.sdf.org", "/", sub {
       $body;
 };
 
+my $f1 = http_get "icculus?listarchives=1", "drbean.sdf.org";
+my $f2 = http_get "kuriyama", "freebsd.org";
+my $f3 = http_get "mikachu", "icculus.org";
+
+print "kuriyama's gpg key\n"    , $f1->recv, "\n";
+print "icculus' plan archive\n" , $f2->recv, "\n";
+print "mikachu's plan zomgn\n"  , $f3->recv, "\n";
+
+$loop->recv;
