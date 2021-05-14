@@ -1,10 +1,10 @@
 use AnyEvent;
 use AnyEvent::Handle;
-use AnyEvent::HTTP;
+# use AnyEvent::HTTP;
  
-my $loop = AnyEvent->condvar;
+# my $loop = AnyEvent->condvar;
 
-sub http_get ($@) {
+sub http_get {
    my ($host, $uri, $cb) = @_;
  
    # store results here
@@ -14,11 +14,11 @@ sub http_get ($@) {
       connect  => [$host => 'http'],
       on_error => sub {
          $cb->("HTTP/1.0 500 $!");
-         # $handle->destroy; # explicitly destroy handle
+         $handle->destroy; # explicitly destroy handle
       },
       on_eof   => sub {
          $cb->($response, $header, $body);
-         # $handle->destroy; # explicitly destroy handle
+         $handle->destroy; # explicitly destroy handle
       };
  
    $handle->push_write ("GET $uri HTTP/1.0\015\012\015\012");
@@ -42,23 +42,24 @@ sub http_get ($@) {
    });
 }
 
-#http_get "http://news.google.com", "/?hl=zh", sub {
-#   my ($response, $header, $body) = @_;
+http_get "drbean.sdf.org", "/", sub {
+   my ($response, $header, $body) = @_;
+ 
+   print
+      $response, "\n",
+      $body;
+};
+
+# my $f1 = http_get "drbean.sdf.org", '/', ;
+# my $f2 = http_get "kuriyama", "freebsd.org";
+# my $f3 = http_get "mikachu", "icculus.org";
 # 
-#   print
-#      $response, "\n",
-#      $body;
-#};
+# print "kuriyama's gpg key\n"    , $f1->recv, "\n";
+# print "icculus' plan archive\n" , $f2->recv, "\n";
+# print "mikachu's plan zomgn\n"  , $f3->recv, "\n";
 
-my $f1 = http_get "drbean.sdf.org" '/', ;
-my $f2 = http_get "kuriyama", "freebsd.org";
-my $f3 = http_get "mikachu", "icculus.org";
+# $loop->recv;
 
-print "kuriyama's gpg key\n"    , $f1->recv, "\n";
-print "icculus' plan archive\n" , $f2->recv, "\n";
-print "mikachu's plan zomgn\n"  , $f3->recv, "\n";
-
-$loop->recv;
 #use AnyEvent;
 #use AnyEvent::Socket;
 # 
