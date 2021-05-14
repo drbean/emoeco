@@ -4,6 +4,61 @@ use AnyEvent::HTTP;
  
 my $loop = AnyEvent->condvar;
 
+sub http_get ($@) {
+   my ($host, $uri, $cb) = @_;
+ 
+   # store results here
+   my ($response, $header, $body);
+ 
+   my $handle; $handle = new AnyEvent::Handle
+      connect  => [$host => 'http'],
+      on_error => sub {
+         $cb->("HTTP/1.0 500 $!");
+         # $handle->destroy; # explicitly destroy handle
+      },
+      on_eof   => sub {
+         $cb->($response, $header, $body);
+         # $handle->destroy; # explicitly destroy handle
+      };
+ 
+   $handle->push_write ("GET $uri HTTP/1.0\015\012\015\012");
+ 
+   # now fetch response status line
+   $handle->push_read (line => sub {
+      my ($handle, $line) = @_;
+      $response = $line;
+   });
+ 
+   # then the headers
+   $handle->push_read (line => "\015\012\015\012", sub {
+      my ($handle, $line) = @_;
+      $header = $line;
+   });
+ 
+   # and finally handle any remaining data as body
+   $handle->on_read (sub {
+      $body .= $_[0]->rbuf;
+      $_[0]->rbuf = "";
+   });
+}
+
+#http_get "http://news.google.com", "/?hl=zh", sub {
+#   my ($response, $header, $body) = @_;
+# 
+#   print
+#      $response, "\n",
+#      $body;
+#};
+
+my $f1 = http_get "drbean.sdf.org" '/', ;
+my $f2 = http_get "kuriyama", "freebsd.org";
+my $f3 = http_get "mikachu", "icculus.org";
+
+print "kuriyama's gpg key\n"    , $f1->recv, "\n";
+print "icculus' plan archive\n" , $f2->recv, "\n";
+print "mikachu's plan zomgn\n"  , $f3->recv, "\n";
+
+$loop->recv;
 #use AnyEvent;
 #use AnyEvent::Socket;
 # 
@@ -90,58 +145,3 @@ my $loop = AnyEvent->condvar;
 #
 #$quit_program->recv;
 
-sub http_get ($@) {
-   my ($host, $uri, $cb) = @_;
- 
-   # store results here
-   my ($response, $header, $body);
- 
-   my $handle; $handle = new AnyEvent::Handle
-      connect  => [$host => 'http'],
-      on_error => sub {
-         $cb->("HTTP/1.0 500 $!");
-         # $handle->destroy; # explicitly destroy handle
-      },
-      on_eof   => sub {
-         $cb->($response, $header, $body);
-         # $handle->destroy; # explicitly destroy handle
-      };
- 
-   $handle->push_write ("GET $uri HTTP/1.0\015\012\015\012");
- 
-   # now fetch response status line
-   $handle->push_read (line => sub {
-      my ($handle, $line) = @_;
-      $response = $line;
-   });
- 
-   # then the headers
-   $handle->push_read (line => "\015\012\015\012", sub {
-      my ($handle, $line) = @_;
-      $header = $line;
-   });
- 
-   # and finally handle any remaining data as body
-   $handle->on_read (sub {
-      $body .= $_[0]->rbuf;
-      $_[0]->rbuf = "";
-   });
-}
-
-http_get "http://news.google.com", "/?hl=zh", sub {
-   my ($response, $header, $body) = @_;
- 
-   print
-      $response, "\n",
-      $body;
-};
-
-my $f1 = http_get "icculus?listarchives=1", "drbean.sdf.org";
-my $f2 = http_get "kuriyama", "freebsd.org";
-my $f3 = http_get "mikachu", "icculus.org";
-
-print "kuriyama's gpg key\n"    , $f1->recv, "\n";
-print "icculus' plan archive\n" , $f2->recv, "\n";
-print "mikachu's plan zomgn\n"  , $f3->recv, "\n";
-
-$loop->recv;
