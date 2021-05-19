@@ -5,8 +5,9 @@ my $loop = AnyEvent->condvar;
 
 my $B='';
 
-my $watcher = http_get "https://api.twitter.com/2/tweets/search/stream?tweet.fields=conversation_id&expansions=author_id&user.fields=created_at"
-	, headers => {"Authorization" => "Bearer $B"}
+my $watcher = http_get "https://api.twitter.com/2/tweets/search/stream/rules"
+	, headers => {"Authorization" => "Bearer $B", "Content-type" => "application/json"}
+	, {"delete" => {"ids" => ["1394519411847954437"]}}
 	, sub {
    my ($body, $hdr) = @_;
  
