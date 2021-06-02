@@ -9,7 +9,7 @@ use JSON;
 my $ua = LWP::UserAgent->new;
 
 my $VI='7SeqQu2Ckcc';
-my $KEY='AIzaSyAFRYuM-4pSfks7_tUEhydomqq-VQqpw_M';
+my $KEY='';
 
 my $url = "https://youtube.googleapis.com/youtube/v3/commentThreads?videoId=$VI&part=id,snippet,replies&maxResults=100&key=$KEY";
 
